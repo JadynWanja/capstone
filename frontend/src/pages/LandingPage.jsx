@@ -7,7 +7,10 @@ import {
   ShieldCheck,
   ArrowRight,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Heart,
+  Zap,
+  Award
 } from 'lucide-react';
 import heroBg from '../assets/hero-bg.jpg';
 
@@ -42,7 +45,7 @@ const LandingPage = () => {
             Sign In
           </button>
           <button className="btn btn-primary" onClick={() => navigate('/login?tab=register')}>
-            Get Started Free <ArrowRight size={18} />
+            Join Our Team <ArrowRight size={18} />
           </button>
         </div>
       </header>
@@ -67,17 +70,18 @@ const LandingPage = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              padding: '0.4rem 1rem',
+              padding: '0.5rem 1.25rem',
               borderRadius: '9999px',
-              background: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
+              background: 'rgba(99, 102, 241, 0.18)',
+              border: '1px solid rgba(99, 102, 241, 0.4)',
               color: 'var(--accent-cyan)',
-              fontSize: '0.85rem',
+              fontSize: '0.9rem',
               fontWeight: 700,
-              marginBottom: '1.75rem'
+              marginBottom: '1.75rem',
+              boxShadow: '0 0 20px rgba(99, 102, 241, 0.25)'
             }}
           >
-            <Sparkles size={16} /> Next-Generation HRMS Platform
+            <Sparkles size={18} /> Empowering Extraordinary Teams to Achieve More Together
           </div>
 
           <h1
@@ -87,24 +91,24 @@ const LandingPage = () => {
               lineHeight: 1.15,
               letterSpacing: '-1.5px',
               marginBottom: '1.5rem',
-              background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
+              background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}
           >
-            Unify Your People, Operations & Payroll Workflows in <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Capstone Hub</span>
+            Great Things in Business Are Never Done by One Person. They Are Done by a <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Team</span>.
           </h1>
 
-          <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '750px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-            Eliminate fragmented spreadsheets and paper chains. Centralize employee records, automate leave approval workflows, track real-time attendance, and maintain strict role-based data security.
+          <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+            Welcome to <strong>Capstone Hub</strong> — where passion meets collaboration. We bring your team together in one seamless workspace, simplifying workflows, celebrating milestones, and inspiring everyone to reach their highest potential.
           </p>
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4rem' }}>
-            <button className="btn btn-primary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=register')}>
-              Launch Workspace <ArrowRight size={20} />
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4.5rem' }}>
+            <button className="btn btn-primary" style={{ padding: '1rem 2.25rem', fontSize: '1.05rem', fontWeight: 700 }} onClick={() => navigate('/login?tab=register')}>
+              Start Working Together <ArrowRight size={20} />
             </button>
-            <button className="btn btn-secondary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=login')}>
-              Sign In to Account
+            <button className="btn btn-secondary" style={{ padding: '1rem 2.25rem', fontSize: '1.05rem' }} onClick={() => navigate('/login?tab=login')}>
+              Sign In to Workspace
             </button>
           </div>
 
@@ -114,9 +118,9 @@ const LandingPage = () => {
               <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo)', marginBottom: '1.25rem' }}>
                 <Users size={28} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Employee Directory</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Connected Team Directory</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                Maintain a single source of truth for personal data, departments, job titles, and sensitive field permissions.
+                Build meaningful connections. Know who’s who, celebrate team talents, and bridge departments with transparent organization profiles.
               </p>
             </div>
 
@@ -124,9 +128,9 @@ const LandingPage = () => {
               <div className="stat-icon" style={{ background: 'rgba(0, 242, 254, 0.15)', color: 'var(--accent-cyan)', marginBottom: '1.25rem' }}>
                 <Calendar size={28} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Leave & Approvals</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Balanced Rest & Leave</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                Automated leave balances, time-off requests, and one-click manager approval queues with notifications.
+                Support team well-being. Easy time-off requests, transparent leave balances, and swift manager approvals so everyone returns energized.
               </p>
             </div>
 
@@ -134,9 +138,9 @@ const LandingPage = () => {
               <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)', marginBottom: '1.25rem' }}>
                 <Clock size={28} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Attendance Clocking</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Synchronized Daily Rhythm</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                Real-time daily clock in/out tracking with automatic shift hours, LATE detection, and exportable CSV reports.
+                Stay in sync effortlessly. Track daily shift clockings and work hours so your entire team moves in perfect harmony every day.
               </p>
             </div>
 
@@ -144,41 +148,58 @@ const LandingPage = () => {
               <div className="stat-icon" style={{ background: 'rgba(236, 72, 153, 0.15)', color: 'var(--accent-rose)', marginBottom: '1.25rem' }}>
                 <ShieldCheck size={28} />
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Role-Based Audit Security</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Trust & Mutual Respect</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                Strict RBAC enforcement for Admins, HR Staff, Managers, and Employees with complete audit logging.
+                Work with confidence. Role-based permissions and complete audit transparency keep team data safe, secure, and respected.
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Team Spirit Encouragement Banner */}
+      <section style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)', padding: '4rem 2rem', borderBottom: '1px solid var(--border-color)', textAlign: 'center' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+            <Heart size={32} color="var(--accent-rose)" />
+            <Zap size={32} color="var(--accent-cyan)" />
+            <Award size={32} color="var(--accent-indigo)" />
+          </div>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem', background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            "Alone we can do so little; together we can do so much."
+          </h2>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            At Capstone Hub, every voice is heard, every effort is valued, and every goal is won together as one unified team.
+          </p>
+        </div>
+      </section>
+
       {/* Role Capabilities Section */}
-      <section style={{ background: 'var(--bg-secondary)', padding: '5rem 2rem', borderTop: '1px solid var(--border-color)' }}>
+      <section style={{ background: 'var(--bg-secondary)', padding: '5rem 2rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 800, marginBottom: '0.75rem' }}>Designed for Every User Role</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>Customized permissions and streamlined interfaces tailored to your position</p>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 800, marginBottom: '0.75rem' }}>Empowering Every Role in the Team</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>Tailored tools so each team member can focus on what they do best</p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
             <div className="glass-card" style={{ padding: '1.75rem' }}>
               <span className="badge badge-admin" style={{ marginBottom: '1rem' }}>ADMIN</span>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>System Owner</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Visionary Leader</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Full CRUD employee management</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Department & role configuration</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> System audit log viewer</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Full workspace oversight & growth</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Department & role alignment</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> System transparency & audit logging</li>
               </ul>
             </div>
 
             <div className="glass-card" style={{ padding: '1.75rem' }}>
               <span className="badge badge-hr" style={{ marginBottom: '1rem' }}>HR STAFF</span>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Operations Manager</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>People Operations</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Employee onboarding & salary data</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Organization leave approvals</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Exportable CSV reports</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Smooth onboarding & employee care</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Fair leave & balance management</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Transparent reporting & insights</li>
               </ul>
             </div>
 
@@ -186,19 +207,19 @@ const LandingPage = () => {
               <span className="badge badge-manager" style={{ marginBottom: '1rem' }}>MANAGER</span>
               <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Team Leader</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Direct report leave approvals</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Team attendance calendar</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Team roster visibility</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Supportive leave approvals</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Team availability calendar</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Fostering collaboration & trust</li>
               </ul>
             </div>
 
             <div className="glass-card" style={{ padding: '1.75rem' }}>
               <span className="badge badge-employee" style={{ marginBottom: '1rem' }}>EMPLOYEE</span>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Staff Member</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Team Contributor</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Profile self-service updates</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Submit leave requests & balance</li>
-                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Daily shift clock in/out widget</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Personal profile ownership</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Easy leave booking & balance tracking</li>
+                <li style={{ display: 'flex', gap: '0.5rem' }}><CheckCircle2 size={16} color="var(--accent-emerald)" /> Simple daily shift clocking</li>
               </ul>
             </div>
           </div>
@@ -207,7 +228,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{ padding: '2.5rem', borderTop: '1px solid var(--border-color)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-        © {new Date().getFullYear()} Capstone Hub Enterprise HRMS. All rights reserved.
+        © {new Date().getFullYear()} Capstone Hub. Built for teams working together towards excellence.
       </footer>
     </div>
   );
