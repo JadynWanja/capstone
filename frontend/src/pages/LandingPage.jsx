@@ -65,25 +65,6 @@ const LandingPage = () => {
         }}
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.5rem 1.25rem',
-              borderRadius: '9999px',
-              background: 'rgba(99, 102, 241, 0.18)',
-              border: '1px solid rgba(99, 102, 241, 0.4)',
-              color: 'var(--accent-cyan)',
-              fontSize: '0.9rem',
-              fontWeight: 700,
-              marginBottom: '1.75rem',
-              boxShadow: '0 0 20px rgba(99, 102, 241, 0.25)'
-            }}
-          >
-            <Sparkles size={18} /> Empowering Extraordinary Teams to Achieve More Together
-          </div>
-
           <h1
             style={{
               fontSize: '3.75rem',
