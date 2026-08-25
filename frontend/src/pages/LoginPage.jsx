@@ -16,6 +16,8 @@ import {
   Info
 } from 'lucide-react';
 
+import loginBg from '../assets/login-bg.jpg';
+
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,24 +60,19 @@ const LoginPage = () => {
       })
       .catch(() => {
         // Fallback default list
-        const fallbackDepts = [
-          { id: 1, name: 'Engineering', code: 'ENG' },
-          { id: 2, name: 'Human Resources', code: 'HR' },
-          { id: 3, name: 'Sales & Marketing', code: 'SALES' },
-          { id: 4, name: 'Finance', code: 'FIN' },
-        ];
-        setDepartmentsList(fallbackDepts);
+        setDepartmentsList([
+          { id: 1, name: 'Engineering' },
+          { id: 2, name: 'Human Resources' },
+          { id: 3, name: 'Sales & Marketing' },
+          { id: 4, name: 'Finance' }
+        ]);
         setRegDepartmentId(1);
       });
   }, []);
 
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    setValidationError('');
+    if (!loginEmail || !loginPassword) return;
     dispatch(loginUser({ email: loginEmail, password: loginPassword }));
   };
 
@@ -83,23 +80,18 @@ const LoginPage = () => {
     e.preventDefault();
     setValidationError('');
 
-    if (!regDepartmentId) {
-      setValidationError('Please select your company department.');
-      return;
-    }
-
-    if (regPassword.length < 6) {
-      setValidationError('Password must be at least 6 characters long.');
-      return;
-    }
-
-    if (!/(?=.*[A-Za-z])(?=.*\d)/.test(regPassword)) {
-      setValidationError('Password must contain at least one letter and one number.');
+    if (!regFirstName || !regLastName || !regEmail || !regPassword || !regConfirmPassword) {
+      setValidationError('Please complete all required registration fields.');
       return;
     }
 
     if (regPassword !== regConfirmPassword) {
-      setValidationError('Passwords do not match.');
+      setValidationError('Password confirmation does not match.');
+      return;
+    }
+
+    if (regPassword.length < 6) {
+      setValidationError('Password must be at least 6 characters in length.');
       return;
     }
 
@@ -112,20 +104,24 @@ const LoginPage = () => {
     }));
   };
 
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   // High-contrast, eligible department styling definitions
   const departmentStyleMap = {
     'Engineering': {
-      accentColor: '#00f2fe',
-      bgColor: 'rgba(0, 242, 254, 0.12)',
-      borderColor: 'rgba(0, 242, 254, 0.5)',
-      desc: 'Technical software, systems & DevOps engineering',
+      accentColor: '#6366f1',
+      bgColor: 'rgba(99, 102, 241, 0.12)',
+      borderColor: 'rgba(99, 102, 241, 0.5)',
+      desc: 'Full-stack development & core infrastructure',
       icon: Code
     },
     'Human Resources': {
       accentColor: '#8b5cf6',
       bgColor: 'rgba(139, 92, 246, 0.12)',
       borderColor: 'rgba(139, 92, 246, 0.5)',
-      desc: 'People operations, talent acquisition & culture',
+      desc: 'Talent management, onboarding & workplace culture',
       icon: Users
     },
     'Sales & Marketing': {
@@ -155,14 +151,22 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="auth-wrapper">
+    <div
+      className="auth-wrapper"
+      style={{
+        backgroundImage: `linear-gradient(135deg, rgba(6, 9, 19, 0.82) 0%, rgba(12, 18, 34, 0.92) 100%), url(${loginBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="glass-card auth-card" style={{ maxWidth: activeTab === 'register' ? '600px' : '480px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <div className="logo-badge" style={{ margin: '0 auto 0.85rem', width: '52px', height: '52px', fontSize: '1.5rem' }}>
-            TH
+            CH
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Team Hub</h1>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Capstone Hub</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
             Workforce Portal Authentication
           </p>
