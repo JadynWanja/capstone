@@ -33,8 +33,8 @@ const LandingPage = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div className="logo-badge">TH</div>
-          <span className="logo-text" style={{ fontSize: '1.4rem' }}>Team Hub</span>
+          <div className="logo-badge">CH</div>
+          <span className="logo-text" style={{ fontSize: '1.4rem' }}>Capstone Hub</span>
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -92,7 +92,7 @@ const LandingPage = () => {
               WebkitTextFillColor: 'transparent'
             }}
           >
-            Unify Your People, Operations & Payroll Workflows in <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Team Hub</span>
+            Unify Your People, Operations & Payroll Workflows in <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Capstone Hub</span>
           </h1>
 
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '750px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
@@ -207,7 +207,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{ padding: '2.5rem', borderTop: '1px solid var(--border-color)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-        © {new Date().getFullYear()} Team Hub Enterprise HRMS. All rights reserved.
+        © {new Date().getFullYear()} Capstone Hub Enterprise HRMS. All rights reserved.
       </footer>
     </div>
   );
