@@ -7,17 +7,15 @@ import {
   ShieldCheck,
   ArrowRight,
   Sparkles,
-  CheckCircle2,
-  Building2,
-  Award,
-  Zap
+  CheckCircle2
 } from 'lucide-react';
+import heroBg from '../assets/hero-bg.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
       {/* Navigation Bar */}
       <header
         style={{
@@ -27,7 +25,7 @@ const LandingPage = () => {
           justifyContent: 'space-between',
           padding: '0 3rem',
           borderBottom: '1px solid var(--border-color)',
-          background: 'rgba(6, 9, 19, 0.8)',
+          background: 'rgba(6, 9, 19, 0.85)',
           backdropFilter: 'blur(16px)',
           position: 'sticky',
           top: 0,
@@ -49,94 +47,108 @@ const LandingPage = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section style={{ padding: '6rem 2rem 4rem', maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.4rem 1rem',
-            borderRadius: '9999px',
-            background: 'rgba(99, 102, 241, 0.15)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
-            color: 'var(--accent-cyan)',
-            fontSize: '0.85rem',
-            fontWeight: 700,
-            marginBottom: '1.75rem'
-          }}
-        >
-          <Sparkles size={16} /> Next-Generation HRMS Platform
-        </div>
-
-        <h1
-          style={{
-            fontSize: '3.75rem',
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: '-1.5px',
-            marginBottom: '1.5rem',
-            background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}
-        >
-          Unify Your People, Operations & Payroll Workflows in <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Team Hub</span>
-        </h1>
-
-        <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '750px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-          Eliminate fragmented spreadsheets and paper chains. Centralize employee records, automate leave approval workflows, track real-time attendance, and maintain strict role-based data security.
-        </p>
-
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4rem' }}>
-          <button className="btn btn-primary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=register')}>
-            Launch Workspace <ArrowRight size={20} />
-          </button>
-          <button className="btn btn-secondary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=login')}>
-            Sign In to Account
-          </button>
-        </div>
-
-        {/* Feature Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', textAlign: 'left' }}>
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo)', marginBottom: '1.25rem' }}>
-              <Users size={28} />
-            </div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Employee Directory</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              Maintain a single source of truth for personal data, departments, job titles, and sensitive field permissions.
-            </p>
+      {/* Hero Section with Office Background Image */}
+      <section
+        style={{
+          position: 'relative',
+          padding: '7.5rem 2rem 5.5rem',
+          width: '100%',
+          backgroundImage: `linear-gradient(180deg, rgba(6, 9, 19, 0.82) 0%, rgba(6, 9, 19, 0.96) 100%), url(${heroBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          borderBottom: '1px solid var(--border-color)',
+          textAlign: 'center'
+        }}
+      >
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.4rem 1rem',
+              borderRadius: '9999px',
+              background: 'rgba(99, 102, 241, 0.15)',
+              border: '1px solid rgba(99, 102, 241, 0.3)',
+              color: 'var(--accent-cyan)',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              marginBottom: '1.75rem'
+            }}
+          >
+            <Sparkles size={16} /> Next-Generation HRMS Platform
           </div>
 
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <div className="stat-icon" style={{ background: 'rgba(0, 242, 254, 0.15)', color: 'var(--accent-cyan)', marginBottom: '1.25rem' }}>
-              <Calendar size={28} />
-            </div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Leave & Approvals</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              Automated leave balances, time-off requests, and one-click manager approval queues with notifications.
-            </p>
+          <h1
+            style={{
+              fontSize: '3.75rem',
+              fontWeight: 800,
+              lineHeight: 1.15,
+              letterSpacing: '-1.5px',
+              marginBottom: '1.5rem',
+              background: 'linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
+            Unify Your People, Operations & Payroll Workflows in <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Team Hub</span>
+          </h1>
+
+          <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '750px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+            Eliminate fragmented spreadsheets and paper chains. Centralize employee records, automate leave approval workflows, track real-time attendance, and maintain strict role-based data security.
+          </p>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4rem' }}>
+            <button className="btn btn-primary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=register')}>
+              Launch Workspace <ArrowRight size={20} />
+            </button>
+            <button className="btn btn-secondary" style={{ padding: '0.9rem 2rem', fontSize: '1rem' }} onClick={() => navigate('/login?tab=login')}>
+              Sign In to Account
+            </button>
           </div>
 
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)', marginBottom: '1.25rem' }}>
-              <Clock size={28} />
+          {/* Feature Cards Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', textAlign: 'left' }}>
+            <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="stat-icon" style={{ background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo)', marginBottom: '1.25rem' }}>
+                <Users size={28} />
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Employee Directory</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Maintain a single source of truth for personal data, departments, job titles, and sensitive field permissions.
+              </p>
             </div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Attendance Clocking</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              Real-time daily clock in/out tracking with automatic shift hours, LATE detection, and exportable CSV reports.
-            </p>
-          </div>
 
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <div className="stat-icon" style={{ background: 'rgba(236, 72, 153, 0.15)', color: 'var(--accent-rose)', marginBottom: '1.25rem' }}>
-              <ShieldCheck size={28} />
+            <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="stat-icon" style={{ background: 'rgba(0, 242, 254, 0.15)', color: 'var(--accent-cyan)', marginBottom: '1.25rem' }}>
+                <Calendar size={28} />
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Leave & Approvals</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Automated leave balances, time-off requests, and one-click manager approval queues with notifications.
+              </p>
             </div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Role-Based Audit Security</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              Strict RBAC enforcement for Admins, HR Staff, Managers, and Employees with complete audit logging.
-            </p>
+
+            <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)', marginBottom: '1.25rem' }}>
+                <Clock size={28} />
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Attendance Clocking</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Real-time daily clock in/out tracking with automatic shift hours, LATE detection, and exportable CSV reports.
+              </p>
+            </div>
+
+            <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="stat-icon" style={{ background: 'rgba(236, 72, 153, 0.15)', color: 'var(--accent-rose)', marginBottom: '1.25rem' }}>
+                <ShieldCheck size={28} />
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Role-Based Audit Security</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Strict RBAC enforcement for Admins, HR Staff, Managers, and Employees with complete audit logging.
+              </p>
+            </div>
           </div>
         </div>
       </section>
