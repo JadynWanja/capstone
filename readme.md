@@ -1,4 +1,4 @@
-# Pulse HRMS - Human Resource Management System
+# Capstone HRMS - Human Resource Management System
 
 Centralized, secure, role-aware web application for small and medium-sized organizations to streamline core HR operations, employee records, leave approvals, attendance tracking, and audit logging.
 
