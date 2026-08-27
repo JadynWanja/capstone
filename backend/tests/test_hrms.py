@@ -214,7 +214,9 @@ def test_admin_direct_password_reset(client):
     }, headers=headers)
     assert invalid_reset.status_code == 400
 
-    # 5. Admin resets target user's password from local machine (127.0.0.1) with valid payload
+    # 5. Admin resets target user's password from local machine (127.0.0.1) with valid payload & grants eligibility
+    client.put(f'/api/auth/users/{user_id}/eligibility', json={'is_active': True}, headers=headers)
+
     valid_reset = client.put(f'/api/auth/users/{user_id}/reset-password', json={
         'new_password': 'AdminAssigned123'
     }, headers=headers)

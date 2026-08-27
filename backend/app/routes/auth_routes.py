@@ -49,8 +49,8 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({'success': False, 'message': 'An account with this email already exists'}), 400
 
-    # 1. Create User account with EMPLOYEE role by default
-    user = User(email=email, role=UserRole.EMPLOYEE, is_active=True)
+    # 1. Create User account with EMPLOYEE role, pending Admin eligibility authorization (is_active=False)
+    user = User(email=email, role=UserRole.EMPLOYEE, is_active=False)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -92,17 +92,16 @@ def register():
         db.session.add(lb)
     db.session.commit()
 
-    token = generate_token(user)
-    log_audit('USER_REGISTER', 'User', target_id=user.id, details=f"New user registered: {first_name} {last_name} ({email}) assigned to {dept.name}", user_id=user.id)
+    log_audit('USER_REGISTER_PENDING', 'User', target_id=user.id, details=f"New user registered (pending Admin authorization): {first_name} {last_name} ({email}) assigned to {dept.name}", user_id=user.id)
 
     return jsonify({
         'success': True,
-        'message': f'Registration successful in {dept.name} department',
-        'token': token,
+        'message': f'Registration submitted for {first_name} {last_name}! Your account is pending Admin eligibility authorization before you can log in.',
         'user': {
             'id': user.id,
             'email': user.email,
             'role': user.role,
+            'is_active': False,
             'employee': employee.to_dict(include_sensitive=False)
         }
     }), 201
