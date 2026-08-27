@@ -1,10 +1,18 @@
 import axios from 'axios';
 
-const ACTIVE_BACKEND = 'https://hrms-backend-qj1f.onrender.com/api';
-let rawUrl = (import.meta.env.VITE_API_URL || ACTIVE_BACKEND).trim();
+// Dynamically fetch backend URL from Vercel environment variables or fallback to window origin / local API
+const envApiUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '';
 
-if (rawUrl.includes('hrms-zhit.onrender.com')) {
-  rawUrl = ACTIVE_BACKEND;
+let rawUrl = envApiUrl.trim();
+
+if (!rawUrl) {
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    // Default relative fallback when hosted
+    rawUrl = `${window.location.origin}/api`;
+  } else {
+    // Local dev server fallback
+    rawUrl = 'http://localhost:5000/api';
+  }
 }
 
 if (rawUrl.endsWith('/')) {
@@ -13,7 +21,10 @@ if (rawUrl.endsWith('/')) {
 if (!rawUrl.endsWith('/api')) {
   rawUrl = `${rawUrl}/api`;
 }
+
 const API_BASE_URL = rawUrl;
+
+console.log('[API Service] Connected to Backend URL:', API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
