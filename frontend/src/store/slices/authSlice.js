@@ -31,10 +31,8 @@ export const registerUser = createAsyncThunk(
   async (registerData, { rejectWithValue }) => {
     try {
       const response = await api.post('/auth/register', registerData);
-      const { token, user } = response.data;
-      localStorage.setItem('hrms_token', token);
-      localStorage.setItem('hrms_user', JSON.stringify(user));
-      return { token, user };
+      const { message, user } = response.data;
+      return { message: message || 'Registration submitted! Awaiting Admin authorization.', user };
     } catch (error) {
       if (!error.response) {
         return rejectWithValue('Network Error: Unable to connect to backend server. Please verify VITE_API_URL environment variable on Vercel.');
@@ -109,16 +107,17 @@ const authSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.successMessage = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
+        state.successMessage = action.payload.message;
+        state.isAuthenticated = false;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.successMessage = null;
       })
       // Fetch me
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {

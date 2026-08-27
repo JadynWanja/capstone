@@ -76,9 +76,12 @@ const LoginPage = () => {
     dispatch(loginUser({ email: loginEmail, password: loginPassword }));
   };
 
-  const handleRegisterSubmit = (e) => {
+  const [registerSuccessMsg, setRegisterSuccessMsg] = useState('');
+
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setValidationError('');
+    setRegisterSuccessMsg('');
 
     if (!regFirstName || !regLastName || !regEmail || !regPassword || !regConfirmPassword) {
       setValidationError('Please complete all required registration fields.');
@@ -95,13 +98,21 @@ const LoginPage = () => {
       return;
     }
 
-    dispatch(registerUser({
-      first_name: regFirstName,
-      last_name: regLastName,
-      email: regEmail,
-      password: regPassword,
-      department_id: Number(regDepartmentId)
-    }));
+    try {
+      const res = await dispatch(registerUser({
+        first_name: regFirstName,
+        last_name: regLastName,
+        email: regEmail,
+        password: regPassword,
+        department_id: Number(regDepartmentId)
+      })).unwrap();
+
+      setRegisterSuccessMsg(res.message || 'Registration submitted! Your account is pending Admin eligibility authorization before you can log in.');
+      setActiveTab('login');
+      setLoginEmail(regEmail);
+    } catch (err) {
+      // Error handled by Redux state
+    }
   };
 
   if (isAuthenticated) {
@@ -187,6 +198,29 @@ const LoginPage = () => {
             Create Account
           </button>
         </div>
+
+        {/* Registration Pending Success Banner */}
+        {registerSuccessMsg && (
+          <div
+            style={{
+              padding: '0.85rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              background: 'rgba(16, 185, 129, 0.15)',
+              border: '1px solid rgba(16, 185, 129, 0.4)',
+              color: 'var(--accent-emerald)',
+              fontSize: '0.85rem',
+              marginBottom: '1.25rem',
+              textAlign: 'center',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              justifyContent: 'center'
+            }}
+          >
+            <Check size={18} /> {registerSuccessMsg}
+          </div>
+        )}
 
         {/* Global / Validation Error Alerts */}
         {(error || validationError) && (
