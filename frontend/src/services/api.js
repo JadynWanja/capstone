@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Default active production backend URL provided by user
-const PRODUCTION_BACKEND_URL = 'https://capstone-backend-calm.onrender.com/api';
+const PRODUCTION_BACKEND_URL = 'https://cadre-hub-backend.onrender.com/api';
 
 const envApiUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || PRODUCTION_BACKEND_URL;
 
