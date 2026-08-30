@@ -151,7 +151,7 @@ def login():
         include_sensitive = can_view_sensitive_info(user, emp)
         emp_data = emp.to_dict(include_sensitive=include_sensitive) if emp else None
 
-        return jsonify({
+        res = jsonify({
             'success': True,
             'message': 'Login successful',
             'token': token,
@@ -163,6 +163,15 @@ def login():
                 'employee': emp_data
             }
         })
+        res.set_cookie(
+            'access_token',
+            token,
+            httponly=True,
+            secure=True,
+            samesite='None',
+            max_age=86400
+        )
+        return res
     except Exception as err:
         db.session.rollback()
         print(f"[Login Error] {err}")
@@ -191,7 +200,9 @@ def me():
 @token_required
 def logout():
     log_audit('LOGOUT', 'User', target_id=g.current_user.id, details=f"User {g.current_user.email} logged out", user_id=g.current_user.id)
-    return jsonify({'success': True, 'message': 'Logged out successfully'})
+    res = jsonify({'success': True, 'message': 'Logged out successfully'})
+    res.delete_cookie('access_token', secure=True, samesite='None')
+    return res
 
 @auth_bp.route('/users', methods=['GET'])
 @token_required
