@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/slices/uiSlice';
-import { ShieldCheck, UserCheck, UserX, Clock, Building2, RefreshCw, KeyRound } from 'lucide-react';
+import { ShieldCheck, UserCheck, UserX, Clock, Building2, RefreshCw, KeyRound, Mail } from 'lucide-react';
 
 const UserAccessWidget = () => {
   const dispatch = useDispatch();
@@ -52,22 +52,16 @@ const UserAccessWidget = () => {
     }
   };
 
-  const handleAdminResetPassword = async (userObj) => {
-    const newPass = window.prompt(
-      `Set a new password for ${userObj.email}:\n(Must be at least 6 characters, with 1 letter & 1 number)`
-    );
-
-    if (!newPass) return; // User cancelled
-
+  const handleAdminSendResetLink = async (userObj) => {
     try {
-      const res = await api.put(`/auth/users/${userObj.id}/reset-password`, { new_password: newPass });
+      const res = await api.post('/auth/forgot-password', { email: userObj.email });
       dispatch(showToast({
-        message: res.data.message || `Password for ${userObj.email} reset successfully!`,
+        message: res.data.message || `JWT Password reset link sent to ${userObj.email}`,
         type: 'success'
       }));
     } catch (err) {
       dispatch(showToast({
-        message: err.response?.data?.message || 'Failed to update user password.',
+        message: err.response?.data?.message || 'Failed to send password reset link.',
         type: 'error'
       }));
     }
@@ -170,10 +164,10 @@ const UserAccessWidget = () => {
 
                         <button
                           className="btn btn-sm btn-secondary"
-                          onClick={() => handleAdminResetPassword(u)}
+                          onClick={() => handleAdminSendResetLink(u)}
                           style={{ padding: '0.3rem 0.65rem', fontSize: '0.78rem', background: 'rgba(0, 242, 254, 0.1)', borderColor: 'rgba(0, 242, 254, 0.3)', color: 'var(--accent-cyan)' }}
                         >
-                          <KeyRound size={14} /> Set Password
+                          <Mail size={14} /> Send Reset Link
                         </button>
                       </div>
                     </td>
