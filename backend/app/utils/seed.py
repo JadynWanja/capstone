@@ -9,8 +9,19 @@ from app.utils.audit import log_audit
 def seed_database():
     db.create_all()
 
-    # Check if database is already seeded (any admin exists)
+    # Check if database is already seeded
     if User.query.filter_by(role=UserRole.ADMIN).first() or Department.query.first():
+        # Quick fix to migrate the old admin email if it exists
+        admin_user = User.query.filter_by(email="admin@teamhub.com").first()
+        if admin_user:
+            admin_user.email = "admin@cadrehub.com"
+            db.session.commit()
+            
+            admin_employee = Employee.query.filter_by(user_id=admin_user.id).first()
+            if admin_employee:
+                admin_employee.email = "admin@cadrehub.com"
+                db.session.commit()
+            print("Successfully migrated admin email to admin@cadrehub.com")
         return
 
     print("Initializing Cadre Hub database structure...")
