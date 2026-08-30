@@ -177,7 +177,7 @@ const LoginPage = () => {
           <div className="logo-badge" style={{ margin: '0 auto 0.85rem', width: '52px', height: '52px', fontSize: '1.5rem' }}>
             CH
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Capstone Hub</h1>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Cadre Hub</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
             Workforce Portal Authentication
           </p>

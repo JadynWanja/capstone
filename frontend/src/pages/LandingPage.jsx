@@ -37,7 +37,7 @@ const LandingPage = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
           <div className="logo-badge">CH</div>
-          <span className="logo-text" style={{ fontSize: '1.4rem' }}>Capstone Hub</span>
+          <span className="logo-text" style={{ fontSize: '1.4rem' }}>Cadre Hub</span>
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -81,7 +81,7 @@ const LandingPage = () => {
           </h1>
 
           <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-            Welcome to <strong>Capstone Hub</strong> — where passion meets collaboration. We bring your team together in one seamless workspace, simplifying workflows, celebrating milestones, and inspiring everyone to reach their highest potential.
+            Welcome to <strong>Cadre Hub</strong> — where passion meets collaboration. We bring your team together in one seamless workspace, simplifying workflows, celebrating milestones, and inspiring everyone to reach their highest potential.
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4.5rem' }}>
@@ -150,7 +150,7 @@ const LandingPage = () => {
             "Alone we can do so little; together we can do so much."
           </h2>
           <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            At Capstone Hub, every voice is heard, every effort is valued, and every goal is won together as one unified team.
+            At Cadre Hub, every voice is heard, every effort is valued, and every goal is won together as one unified team.
           </p>
         </div>
       </section>
@@ -209,7 +209,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{ padding: '2.5rem', borderTop: '1px solid var(--border-color)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-        © {new Date().getFullYear()} Capstone Hub. Built for teams working together towards excellence.
+        © {new Date().getFullYear()} Cadre Hub. Built for teams working together towards excellence.
       </footer>
     </div>
   );
