@@ -9,8 +9,8 @@ from app.utils.audit import log_audit
 def seed_database():
     db.create_all()
 
-    # Check if admin user exists
-    if User.query.filter_by(email="admin@cadrehub.com").first():
+    # Check if database is already seeded (any admin exists)
+    if User.query.filter_by(role=UserRole.ADMIN).first() or Department.query.first():
         return
 
     print("Initializing Cadre Hub database structure...")
