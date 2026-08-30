@@ -10,10 +10,10 @@ def seed_database():
     db.create_all()
 
     # Check if admin user exists
-    if User.query.filter_by(email="admin@teamhub.com").first():
+    if User.query.filter_by(email="admin@cadrehub.com").first():
         return
 
-    print("Initializing Team Hub database structure...")
+    print("Initializing Cadre Hub database structure...")
 
     # 1. Create Core Departments
     eng_dept = Department(name="Engineering", code="ENG", description="Software development, IT infrastructure and DevOps")
@@ -44,7 +44,7 @@ def seed_database():
     db.session.commit()
 
     # 4. Create Initial System Admin Account
-    u_admin = User(email="admin@teamhub.com", role=UserRole.ADMIN)
+    u_admin = User(email="admin@cadrehub.com", role=UserRole.ADMIN)
     u_admin.set_password("admin123")
     db.session.add(u_admin)
     db.session.commit()
@@ -54,7 +54,7 @@ def seed_database():
         employee_code="EMP-001",
         first_name="System",
         last_name="Administrator",
-        email="admin@teamhub.com",
+        email="admin@cadrehub.com",
         phone="+1 (555) 000-0001",
         department_id=eng_dept.id,
         position_id=pos_sys_admin.id,
@@ -81,7 +81,7 @@ def seed_database():
     db.session.commit()
 
     try:
-        log_audit("INITIALIZE_DATABASE", "System", target_id="1", details="Initialized Team Hub structure with system admin")
+        log_audit("INITIALIZE_DATABASE", "System", target_id="1", details="Initialized Cadre Hub structure with system admin")
     except Exception:
         pass
     print("Database initialization completed successfully!")
