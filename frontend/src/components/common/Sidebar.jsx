@@ -30,7 +30,7 @@ const Sidebar = () => {
       <div className="sidebar-header">
         <div className="logo-badge">CH</div>
         <div>
-          <h1 className="logo-text">Capstone Hub</h1>
+          <h1 className="logo-text">Cadre Hub</h1>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Workforce Suite</span>
         </div>
       </div>
@@ -53,7 +53,7 @@ const Sidebar = () => {
 
       <div style={{ padding: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-          Capstone Hub Enterprise v2.0
+          Cadre Hub Enterprise v2.0
         </div>
       </div>
     </aside>
