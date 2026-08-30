@@ -11,17 +11,21 @@ def seed_database():
 
     # Check if database is already seeded
     if User.query.filter_by(role=UserRole.ADMIN).first() or Department.query.first():
-        # Quick fix to migrate the old admin email if it exists
+        # Quick fix to migrate the old admin email and fix old password hashes
         admin_user = User.query.filter_by(email="admin@teamhub.com").first()
+        if not admin_user:
+            admin_user = User.query.filter_by(email="admin@cadrehub.com").first()
+            
         if admin_user:
             admin_user.email = "admin@cadrehub.com"
+            admin_user.set_password("admin123") # Re-hash using the new bcrypt implementation
             db.session.commit()
             
             admin_employee = Employee.query.filter_by(user_id=admin_user.id).first()
             if admin_employee:
                 admin_employee.email = "admin@cadrehub.com"
                 db.session.commit()
-            print("Successfully migrated admin email to admin@cadrehub.com")
+            print("Successfully updated admin credentials to new security standards")
         return
 
     print("Initializing Cadre Hub database structure...")
