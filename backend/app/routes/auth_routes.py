@@ -478,8 +478,6 @@ def forgot_password():
         return jsonify({
             'success': True,
             'message': msg,
-            'reset_link': reset_link,
-            'token': token,
             'email_sent': email_sent
         })
     except Exception as general_err:
