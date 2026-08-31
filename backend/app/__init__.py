@@ -13,7 +13,8 @@ def create_app(config_class=Config):
         "origins": [
             "http://localhost:5173", 
             "http://127.0.0.1:5173", 
-            "https://capstone-kaf3ker2n-jadyn-bots-projects.vercel.app"
+            "https://capstone-kaf3ker2n-jadyn-bots-projects.vercel.app",
+            "https://capstone-pi-liart.vercel.app"
         ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]
