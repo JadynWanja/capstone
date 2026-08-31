@@ -100,44 +100,6 @@ const ForgotPasswordPage = () => {
               </p>
             </div>
 
-            {/* If reset link is returned in response for testing, show direct reset button */}
-            {successData.reset_link && (
-              <div
-                style={{
-                  padding: '1rem',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'rgba(0, 242, 254, 0.08)',
-                  border: '1px solid rgba(0, 242, 254, 0.25)',
-                  marginBottom: '1.5rem'
-                }}
-              >
-                <div style={{ fontSize: '0.78rem', color: 'var(--accent-cyan)', fontWeight: 700, marginBottom: '0.5rem' }}>
-                  DIRECT TEST RESET LINK:
-                </div>
-                <div style={{ wordBreak: 'break-all', fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'rgba(0, 0, 0, 0.3)', padding: '0.5rem 0.75rem', borderRadius: '4px', marginBottom: '0.75rem' }}>
-                  {successData.reset_link}
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={handleCopyLink}
-                    style={{ flex: 1, fontSize: '0.8rem' }}
-                  >
-                    <Copy size={14} /> {copied ? 'Copied Link!' : 'Copy Reset Link'}
-                  </button>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => {
-                      const url = new URL(successData.reset_link);
-                      navigate(`/reset-password${url.search}`);
-                    }}
-                    style={{ flex: 1, fontSize: '0.8rem' }}
-                  >
-                    Open Reset Page <ArrowRight size={14} />
-                  </button>
-                </div>
-              </div>
-            )}
 
             <button
               className="btn btn-secondary"
