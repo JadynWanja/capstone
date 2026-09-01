@@ -296,6 +296,36 @@ def update_user_eligibility(user_id):
         }
     })
 
+@auth_bp.route('/users/<int:user_id>', methods=['DELETE'])
+@token_required
+@role_required(UserRole.ADMIN)
+def hard_delete_user(user_id):
+    """Admin only route to completely remove a user and all their associated records from the database."""
+    target_user = User.query.get(user_id)
+    if not target_user:
+        return jsonify({'success': False, 'message': 'User account not found'}), 404
+
+    # Prevent admin from deleting themselves
+    if target_user.id == g.current_user.id:
+        return jsonify({'success': False, 'message': 'You cannot delete your own admin account.'}), 403
+
+    try:
+        email = target_user.email
+        db.session.delete(target_user)
+        db.session.commit()
+
+        log_audit('HARD_DELETE_USER', 'User', target_id=user_id, details=f"Permanently deleted user {email} and all associated records", user_id=g.current_user.id)
+
+        return jsonify({
+            'success': True,
+            'message': f'User {email} has been completely removed from the database.'
+        })
+    except Exception as err:
+        db.session.rollback()
+        print(f"[Delete User Error] {err}")
+        return jsonify({'success': False, 'message': f'Failed to delete user: {str(err)}'}), 500
+
+
 @auth_bp.route('/users/<int:user_id>/reset-password', methods=['PUT'])
 @token_required
 @role_required(UserRole.ADMIN, UserRole.HR_STAFF)

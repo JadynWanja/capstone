@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/slices/uiSlice';
-import { ShieldCheck, UserCheck, UserX, Clock, Building2, RefreshCw, KeyRound, Mail } from 'lucide-react';
+import { ShieldCheck, UserCheck, UserX, Clock, Building2, RefreshCw, KeyRound, Mail, Trash2 } from 'lucide-react';
 
 const UserAccessWidget = () => {
   const dispatch = useDispatch();
@@ -64,6 +64,24 @@ const UserAccessWidget = () => {
         message: err.response?.data?.message || 'Failed to send password reset link.',
         type: 'error'
       }));
+    }
+  };
+
+  const handleHardDeleteUser = async (userObj) => {
+    if (window.confirm(`Are you sure you want to PERMANENTLY DELETE the user ${userObj.email}?\n\nThis will instantly wipe their account, employee profile, leave requests, and attendance records from the database. This action CANNOT be undone.`)) {
+      try {
+        const res = await api.delete(`/auth/users/${userObj.id}`);
+        dispatch(showToast({
+          message: res.data.message || `User ${userObj.email} completely deleted.`,
+          type: 'success'
+        }));
+        fetchUserEligibilityList();
+      } catch (err) {
+        dispatch(showToast({
+          message: err.response?.data?.message || 'Failed to delete user.',
+          type: 'error'
+        }));
+      }
     }
   };
 
@@ -168,6 +186,15 @@ const UserAccessWidget = () => {
                           style={{ padding: '0.3rem 0.65rem', fontSize: '0.78rem', background: 'rgba(0, 242, 254, 0.1)', borderColor: 'rgba(0, 242, 254, 0.3)', color: 'var(--accent-cyan)' }}
                         >
                           <Mail size={14} /> Send Reset Link
+                        </button>
+
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => handleHardDeleteUser(u)}
+                          style={{ padding: '0.3rem 0.65rem', fontSize: '0.78rem', background: 'rgba(239, 68, 68, 0.15)', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#fca5a5' }}
+                          title="Permanently Delete User"
+                        >
+                          <Trash2 size={14} /> Delete
                         </button>
                       </div>
                     </td>
