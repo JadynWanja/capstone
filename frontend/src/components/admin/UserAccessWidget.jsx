@@ -188,14 +188,16 @@ const UserAccessWidget = () => {
                           <Mail size={14} /> Send Reset Link
                         </button>
 
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => handleHardDeleteUser(u)}
-                          style={{ padding: '0.3rem 0.65rem', fontSize: '0.78rem', background: 'rgba(239, 68, 68, 0.15)', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#fca5a5' }}
-                          title="Permanently Delete User"
-                        >
-                          <Trash2 size={14} /> Delete
-                        </button>
+                        {u.role !== 'ADMIN' && (
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => handleHardDeleteUser(u)}
+                            style={{ padding: '0.3rem 0.65rem', fontSize: '0.78rem', background: 'rgba(239, 68, 68, 0.15)', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#fca5a5' }}
+                            title="Permanently Delete User"
+                          >
+                            <Trash2 size={14} /> Delete
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
