@@ -305,9 +305,9 @@ def hard_delete_user(user_id):
     if not target_user:
         return jsonify({'success': False, 'message': 'User account not found'}), 404
 
-    # Prevent admin from deleting themselves
-    if target_user.id == g.current_user.id:
-        return jsonify({'success': False, 'message': 'You cannot delete your own admin account.'}), 403
+    # Prevent deletion of any admin account
+    if target_user.role == UserRole.ADMIN:
+        return jsonify({'success': False, 'message': 'Admin accounts cannot be deleted.'}), 403
 
     try:
         email = target_user.email
