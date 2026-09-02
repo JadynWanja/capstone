@@ -203,17 +203,17 @@ def update_employee(emp_id):
         if 'last_name' in data and data['last_name']:
             emp.last_name = data['last_name'].strip()
         if 'department_id' in data:
-            emp.department_id = data['department_id']
+            emp.department_id = data['department_id'] if data['department_id'] != '' else None
         if 'position_id' in data:
-            emp.position_id = data['position_id']
+            emp.position_id = data['position_id'] if data['position_id'] != '' else None
         if 'manager_id' in data:
-            emp.manager_id = data['manager_id']
+            emp.manager_id = data['manager_id'] if data['manager_id'] != '' else None
         if 'employment_status' in data:
             emp.employment_status = data['employment_status']
         if 'hire_date' in data and data['hire_date']:
             emp.hire_date = datetime.strptime(data['hire_date'], '%Y-%m-%d').date()
         if 'salary' in data:
-            emp.salary = float(data['salary']) if data['salary'] is not None else None
+            emp.salary = float(data['salary']) if data['salary'] not in [None, ''] else None
         if 'national_id' in data:
             emp.national_id = data['national_id']
 
@@ -222,7 +222,8 @@ def update_employee(emp_id):
         if 'role' in data and current_u.role == UserRole.ADMIN and not is_self:
             new_role = data['role']
             if new_role in [UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.HR_STAFF, UserRole.ADMIN]:
-                emp.user.role = new_role
+                if emp.user:
+                    emp.user.role = new_role
 
     db.session.commit()
 
