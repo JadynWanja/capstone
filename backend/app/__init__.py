@@ -2,9 +2,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from app.config import Config
 from app.extensions import db
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 def create_app(config_class=Config):
     app = Flask(__name__)
+    
+    # Trust the Render reverse proxy to extract the correct IP and prevent spoofing
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+    
     app.config.from_object(config_class)
 
     # Initialize extensions

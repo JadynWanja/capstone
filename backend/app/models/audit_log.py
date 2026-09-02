@@ -25,5 +25,5 @@ class AuditLog(db.Model):
             'target_id': self.target_id,
             'details': self.details,
             'ip_address': self.ip_address,
-            'timestamp': self.timestamp.isoformat() if self.timestamp else None
+            'timestamp': self.timestamp.isoformat() + 'Z' if self.timestamp else None
         }
