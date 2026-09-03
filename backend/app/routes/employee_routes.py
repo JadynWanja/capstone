@@ -128,6 +128,11 @@ def create_employee():
     hire_date_str = data.get('hire_date')
     hire_date = datetime.strptime(hire_date_str, '%Y-%m-%d').date() if hire_date_str else datetime.utcnow().date()
 
+    dept_id = data.get('department_id')
+    pos_id = data.get('position_id')
+    mgr_id = data.get('manager_id')
+    sal = data.get('salary')
+
     employee = Employee(
         user_id=user.id,
         employee_code=employee_code,
@@ -138,12 +143,12 @@ def create_employee():
         address=data.get('address'),
         emergency_contact_name=data.get('emergency_contact_name'),
         emergency_contact_phone=data.get('emergency_contact_phone'),
-        department_id=data.get('department_id'),
-        position_id=data.get('position_id'),
-        manager_id=data.get('manager_id'),
+        department_id=dept_id if dept_id != '' else None,
+        position_id=pos_id if pos_id != '' else None,
+        manager_id=mgr_id if mgr_id != '' else None,
         employment_status=data.get('employment_status', EmploymentStatus.FULL_TIME),
         hire_date=hire_date,
-        salary=float(data['salary']) if data.get('salary') is not None else None,
+        salary=float(sal) if sal not in [None, ''] else None,
         national_id=data.get('national_id')
     )
 
