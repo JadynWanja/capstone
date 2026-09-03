@@ -11,7 +11,7 @@ from app.utils.audit import log_audit
 def is_valid_phone(phone_str):
     if not phone_str:
         return True
-    return bool(re.match(r'^\+\d{1,3}-\d{4,}$', phone_str.strip()))
+    return bool(re.match(r'^\+\d{1,3}\s\d{4,}$', phone_str.strip()))
 
 employee_bp = Blueprint('employees', __name__, url_prefix='/api/employees')
 
@@ -107,9 +107,9 @@ def create_employee():
         return jsonify({'success': False, 'message': f'User account with email {email} already exists'}), 400
 
     if not is_valid_phone(data.get('phone')):
-        return jsonify({'success': False, 'message': 'Phone number must start with an international calling code, followed by a hyphen and at least 4 digits'}), 400
+        return jsonify({'success': False, 'message': 'Phone number must start with an international calling code, followed by a space and at least 4 digits'}), 400
     if not is_valid_phone(data.get('emergency_contact_phone')):
-        return jsonify({'success': False, 'message': 'Emergency contact phone number must start with an international calling code, followed by a hyphen and at least 4 digits'}), 400
+        return jsonify({'success': False, 'message': 'Emergency contact phone number must start with an international calling code, followed by a space and at least 4 digits'}), 400
 
     # Auto-generate employee code
     count = Employee.query.count() + 1
@@ -197,9 +197,9 @@ def update_employee(emp_id):
     data = request.get_json() or {}
 
     if 'phone' in data and not is_valid_phone(data['phone']):
-        return jsonify({'success': False, 'message': 'Phone number must start with an international calling code, followed by a hyphen and at least 4 digits'}), 400
+        return jsonify({'success': False, 'message': 'Phone number must start with an international calling code, followed by a space and at least 4 digits'}), 400
     if 'emergency_contact_phone' in data and not is_valid_phone(data['emergency_contact_phone']):
-        return jsonify({'success': False, 'message': 'Emergency contact phone number must start with an international calling code, followed by a hyphen and at least 4 digits'}), 400
+        return jsonify({'success': False, 'message': 'Emergency contact phone number must start with an international calling code, followed by a space and at least 4 digits'}), 400
 
     # ── Self-Service Fields (allowed for any authenticated user editing themselves)
     if 'phone' in data:
