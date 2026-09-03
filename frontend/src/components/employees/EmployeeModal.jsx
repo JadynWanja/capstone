@@ -135,12 +135,14 @@ const EmployeeModal = () => {
           <div className="form-group">
             <label className="form-label">Phone Number</label>
             <input
-              type="text"
+              type="tel"
               name="phone"
               className="form-control"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="+1 (555) 000-0000"
+              placeholder="+1-5550000"
+              pattern="^\+\d{1,3}-\d{4,}$"
+              title="Phone number must start with an international calling code, followed by a hyphen and at least 4 digits"
             />
           </div>
           <div className="form-group">
@@ -183,11 +185,14 @@ const EmployeeModal = () => {
           <div className="form-group">
             <label className="form-label">Emergency Contact Phone</label>
             <input
-              type="text"
+              type="tel"
               name="emergency_contact_phone"
               className="form-control"
               value={formData.emergency_contact_phone}
               onChange={handleChange}
+              placeholder="+1-5550000"
+              pattern="^\+\d{1,3}-\d{4,}$"
+              title="Phone number must start with an international calling code, followed by a hyphen and at least 4 digits"
             />
           </div>
         </div>
