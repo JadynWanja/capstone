@@ -39,6 +39,11 @@ def create_app(config_class=Config):
     def handle_options(dummy=None):
         return jsonify({'status': 'ok'}), 200
 
+    @app.route('/api/ping', methods=['GET'])
+    def ping():
+        """Lightweight health check endpoint to keep Render server warm via a cron job."""
+        return jsonify({'status': 'alive', 'message': 'Cadre Hub Backend is warm!'}), 200
+
     with app.app_context():
         try:
             # Explicitly import models so SQLAlchemy metadata registers all tables

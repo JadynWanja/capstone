@@ -415,9 +415,10 @@ def send_reset_email(to_email, reset_link):
 
     if resend_api_key:
         try:
-            # Resend requires you to use onboarding@resend.dev unless you verify a domain.
+            # Use verified domain email if set (e.g. noreply@cadrehub.dpdns.org), otherwise fallback to testing mode
+            resend_from_email = os.environ.get('RESEND_FROM_EMAIL', 'Cadre Hub <onboarding@resend.dev>')
             payload = {
-                "from": "Cadre Hub <onboarding@resend.dev>",
+                "from": resend_from_email,
                 "to": [to_email],
                 "subject": "Cadre Hub — Password Reset Link",
                 "html": html_body
