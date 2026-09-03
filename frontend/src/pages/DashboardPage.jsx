@@ -286,7 +286,7 @@ const DashboardPage = () => {
               {balances.map((b) => {
                 const pct = Math.round((b.used_days / b.allocated_days) * 100);
                 return (
-                  <div key={b.id}>
+                  <div key={b.id} style={{ marginBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
                       <span style={{ fontWeight: 600 }}>{b.leave_type_name}</span>
                       <span><strong>{b.remaining_days}</strong> / {b.allocated_days} days left</span>
@@ -301,6 +301,9 @@ const DashboardPage = () => {
                           transition: 'width 0.4s ease'
                         }}
                       />
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.35rem', textAlign: 'right' }}>
+                      Used So Far: {b.used_days_so_far} | Total Approved: {b.used_days}
                     </div>
                   </div>
                 );

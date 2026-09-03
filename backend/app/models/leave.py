@@ -41,6 +41,33 @@ class LeaveBalance(db.Model):
     def remaining_days(self):
         return max(0, self.allocated_days - self.used_days)
 
+    @property
+    def used_days_so_far(self):
+        today = datetime.utcnow().date()
+        used = 0
+        
+        # We need to calculate how many approved days have actually elapsed
+        # using the LeaveRequest model without causing circular imports
+        from app.models.leave import LeaveRequest, LeaveStatus
+        requests = LeaveRequest.query.filter_by(
+            employee_id=self.employee_id,
+            leave_type_id=self.leave_type_id,
+            status=LeaveStatus.APPROVED
+        ).all()
+        
+        for req in requests:
+            if req.start_date.year != self.year:
+                continue
+                
+            if today < req.start_date:
+                pass # Has not started yet
+            elif today > req.end_date:
+                used += req.total_days
+            else:
+                used += (today - req.start_date).days + 1
+                
+        return used
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -50,6 +77,7 @@ class LeaveBalance(db.Model):
             'year': self.year,
             'allocated_days': self.allocated_days,
             'used_days': self.used_days,
+            'used_days_so_far': self.used_days_so_far,
             'remaining_days': self.remaining_days
         }
 

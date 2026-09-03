@@ -94,10 +94,13 @@ const LeavesPage = () => {
               {b.leave_type_name}
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-cyan)', margin: '0.25rem 0' }}>
-              {b.remaining_days} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>days left</span>
+              {b.remaining_days} <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>days left to request</span>
             </div>
             <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-              Allocated: {b.allocated_days} | Used: {b.used_days}
+              Allocated: {b.allocated_days} | Used So Far: {b.used_days_so_far}
+            </div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              (Total Approved Including Future: {b.used_days})
             </div>
           </div>
         ))}
