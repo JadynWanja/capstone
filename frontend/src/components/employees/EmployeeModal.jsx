@@ -64,6 +64,23 @@ const EmployeeModal = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const getPhoneParts = (fullPhone) => {
+    const parts = (fullPhone || '').trim().split(' ');
+    if (parts.length >= 2 && parts[0].startsWith('+')) {
+      return { prefix: parts[0], num: parts.slice(1).join(' ') };
+    }
+    return { prefix: '+254', num: fullPhone || '' };
+  };
+
+  const handlePhoneChange = (field, part, value) => {
+    const { prefix, num } = getPhoneParts(formData[field]);
+    if (part === 'prefix') {
+      setFormData({ ...formData, [field]: `${value} ${num}`.trim() });
+    } else {
+      setFormData({ ...formData, [field]: `${prefix} ${value}`.trim() });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -134,16 +151,29 @@ const EmployeeModal = () => {
         <div className="form-row">
           <div className="form-group">
             <label className="form-label">Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              className="form-control"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+1-5550000"
-              pattern="^\+\d{1,3}-\d{4,}$"
-              title="Phone number must start with an international calling code, followed by a hyphen and at least 4 digits"
-            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <select
+                className="form-control"
+                style={{ width: '150px' }}
+                value={getPhoneParts(formData.phone).prefix}
+                onChange={(e) => handlePhoneChange('phone', 'prefix', e.target.value)}
+              >
+                <option value="+254">🇰🇪 +254</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+27">🇿🇦 +27</option>
+              </select>
+              <input
+                type="tel"
+                className="form-control"
+                value={getPhoneParts(formData.phone).num}
+                onChange={(e) => handlePhoneChange('phone', 'num', e.target.value)}
+                placeholder="706669766"
+                pattern="^\d{4,}$"
+                title="Phone number must contain at least 4 digits without spaces or hyphens"
+              />
+            </div>
           </div>
           <div className="form-group">
             <label className="form-label">Country</label>
@@ -184,16 +214,29 @@ const EmployeeModal = () => {
           </div>
           <div className="form-group">
             <label className="form-label">Emergency Contact Phone</label>
-            <input
-              type="tel"
-              name="emergency_contact_phone"
-              className="form-control"
-              value={formData.emergency_contact_phone}
-              onChange={handleChange}
-              placeholder="+1-5550000"
-              pattern="^\+\d{1,3}-\d{4,}$"
-              title="Phone number must start with an international calling code, followed by a hyphen and at least 4 digits"
-            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <select
+                className="form-control"
+                style={{ width: '150px' }}
+                value={getPhoneParts(formData.emergency_contact_phone).prefix}
+                onChange={(e) => handlePhoneChange('emergency_contact_phone', 'prefix', e.target.value)}
+              >
+                <option value="+254">🇰🇪 +254</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+27">🇿🇦 +27</option>
+              </select>
+              <input
+                type="tel"
+                className="form-control"
+                value={getPhoneParts(formData.emergency_contact_phone).num}
+                onChange={(e) => handlePhoneChange('emergency_contact_phone', 'num', e.target.value)}
+                placeholder="706669766"
+                pattern="^\d{4,}$"
+                title="Phone number must contain at least 4 digits without spaces or hyphens"
+              />
+            </div>
           </div>
         </div>
 
