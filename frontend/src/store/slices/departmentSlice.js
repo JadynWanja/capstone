@@ -25,6 +25,30 @@ export const createDepartment = createAsyncThunk(
   }
 );
 
+export const updateDepartment = createAsyncThunk(
+  'departments/updateDepartment',
+  async ({ id, deptData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/departments/${id}`, deptData);
+      return response.data.department;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update department');
+    }
+  }
+);
+
+export const deleteDepartment = createAsyncThunk(
+  'departments/deleteDepartment',
+  async (id, { rejectWithValue }) => {
+    try {
+      await api.delete(`/departments/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete department');
+    }
+  }
+);
+
 export const fetchPositions = createAsyncThunk(
   'departments/fetchPositions',
   async (_, { rejectWithValue }) => {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDepartments, fetchPositions, deletePosition, updatePosition } from '../store/slices/departmentSlice';
+import { fetchDepartments, fetchPositions, deletePosition, updatePosition, updateDepartment, deleteDepartment } from '../store/slices/departmentSlice';
 import { openModal, showToast } from '../store/slices/uiSlice';
 import { Building2, Plus, Briefcase, Users, UserCheck, Edit, Trash2 } from 'lucide-react';
 
@@ -15,6 +15,39 @@ const DepartmentsPage = () => {
   }, [dispatch]);
 
   const canManagePositions = ['ADMIN', 'MANAGER', 'HR_STAFF'].includes(user?.role);
+  // Using same role permission for departments
+  const canManageDepartments = ['ADMIN', 'MANAGER', 'HR_STAFF'].includes(user?.role);
+
+  const handleEditDepartment = async (dept) => {
+    const newName = window.prompt(`Edit department name:`, dept.name);
+    if (newName === null || !newName.trim()) return;
+
+    const newCode = window.prompt(`Edit department code for "${newName.trim()}":`, dept.code);
+    if (newCode === null || !newCode.trim()) return;
+
+    try {
+      await dispatch(updateDepartment({
+        id: dept.id,
+        deptData: { name: newName.trim(), code: newCode.trim() }
+      })).unwrap();
+      dispatch(showToast({ message: `Department "${newName.trim()}" updated successfully!`, type: 'success' }));
+      dispatch(fetchDepartments());
+    } catch (err) {
+      dispatch(showToast({ message: err || 'Failed to update department.', type: 'error' }));
+    }
+  };
+
+  const handleDeleteDepartment = async (dept) => {
+    if (window.confirm(`Are you sure you want to delete department "${dept.name}"? This cannot be undone.`)) {
+      try {
+        await dispatch(deleteDepartment(dept.id)).unwrap();
+        dispatch(showToast({ message: `Department "${dept.name}" deleted successfully!`, type: 'success' }));
+        dispatch(fetchDepartments());
+      } catch (err) {
+        dispatch(showToast({ message: err || 'Failed to delete department.', type: 'error' }));
+      }
+    }
+  };
 
   const handleEditPosition = async (pos) => {
     const newTitle = window.prompt(`Edit job position title:`, pos.title);
@@ -93,9 +126,31 @@ const DepartmentsPage = () => {
                 <UserCheck size={16} color="var(--accent-amber)" />
                 <span>Head: <strong>{dept.manager?.name || 'Unassigned'}</strong></span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
-                <Users size={16} />
-                <span>{dept.employee_count} Staff</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent-cyan)' }}>
+                  <Users size={16} />
+                  <span>{dept.employee_count} Staff</span>
+                </div>
+                {canManageDepartments && (
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    <button
+                      className="btn btn-sm btn-secondary"
+                      title="Edit Department"
+                      onClick={() => handleEditDepartment(dept)}
+                      style={{ padding: '0.25rem', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <Edit size={14} />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      title="Delete Department"
+                      onClick={() => handleDeleteDepartment(dept)}
+                      style={{ padding: '0.25rem', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
