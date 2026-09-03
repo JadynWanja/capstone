@@ -9,7 +9,7 @@ audit_bp = Blueprint('audit', __name__, url_prefix='/api/audit-logs')
 @token_required
 @role_required(UserRole.ADMIN, UserRole.HR_STAFF)
 def list_audit_logs():
-    limit = request.args.get('limit', type=int, default=50)
+    limit = request.args.get('limit', type=int, default=1000)
     target_type = request.args.get('target_type')
 
     query = AuditLog.query
