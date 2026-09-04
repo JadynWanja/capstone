@@ -1,100 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useSearchParams, useNavigate } from 'react-router-dom';
-import { loginUser, registerUser, clearAuthError } from '../store/slices/authSlice';
-import api from '../services/api';
-import {
-  Lock,
-  Mail,
-  ArrowRight,
-  Building2,
-  Check,
-  Code,
-  Users,
-  TrendingUp,
-  DollarSign,
-  Info
-} from 'lucide-react';
-
-import loginBg from '../assets/login-bg.jpg';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { loginUser, registerUser, clearError } from '../../store/slices/authSlice';
+import { ArrowRight, Mail, Lock, Check, Building2, Code, Users, TrendingUp, DollarSign, Info } from 'lucide-react';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
-  const initialTab = searchParams.get('tab') === 'register' ? 'register' : 'login';
-  const [activeTab, setActiveTab] = useState(initialTab);
-
-  // Login form state
+  const [activeTab, setActiveTab] = useState('login');
+  
+  // Login State
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-  // Register form state (Phone & Country excluded per user request)
+  // Register State
   const [regFirstName, setRegFirstName] = useState('');
   const [regLastName, setRegLastName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [regDepartmentId, setRegDepartmentId] = useState('');
+  
+  // Validation / Feedback State
   const [validationError, setValidationError] = useState('');
+  const [registerSuccessMsg, setRegisterSuccessMsg] = useState('');
 
-  // Departments list for registration
   const [departmentsList, setDepartmentsList] = useState([]);
 
   useEffect(() => {
-    dispatch(clearAuthError());
+    // Clear Redux errors when tab switches
+    dispatch(clearError());
     setValidationError('');
+    setRegisterSuccessMsg('');
   }, [activeTab, dispatch]);
 
   useEffect(() => {
-    // Fetch departments for department selector
-    api.get('/departments')
-      .then((res) => {
-        const depts = res.data.departments || [];
-        setDepartmentsList(depts);
-        if (depts.length > 0) {
-          setRegDepartmentId(depts[0].id);
+    const fetchDepts = async () => {
+      try {
+        const res = await fetch('/api/departments');
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setDepartmentsList(data);
+        } else if (data && Array.isArray(data.departments)) {
+          setDepartmentsList(data.departments);
         }
-      })
-      .catch(() => {
-        // Fallback default list
-        setDepartmentsList([
-          { id: 1, name: 'Engineering' },
-          { id: 2, name: 'Human Resources' },
-          { id: 3, name: 'Sales & Marketing' },
-          { id: 4, name: 'Finance' }
-        ]);
-        setRegDepartmentId(1);
-      });
-  }, []);
+      } catch (err) {
+        console.error('Error fetching departments for registration:', err);
+      }
+    };
+    if (activeTab === 'register') {
+      fetchDepts();
+    }
+  }, [activeTab]);
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    if (!loginEmail || !loginPassword) return;
+    setValidationError('');
+    setRegisterSuccessMsg('');
     dispatch(loginUser({ email: loginEmail, password: loginPassword }));
   };
-
-  const [registerSuccessMsg, setRegisterSuccessMsg] = useState('');
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setValidationError('');
     setRegisterSuccessMsg('');
 
-    if (!regFirstName || !regLastName || !regEmail || !regPassword || !regConfirmPassword) {
-      setValidationError('Please complete all required registration fields.');
-      return;
-    }
-
     if (regPassword !== regConfirmPassword) {
-      setValidationError('Password confirmation does not match.');
+      setValidationError("Passwords do not match");
       return;
     }
-
-    if (regPassword.length < 6) {
-      setValidationError('Password must be at least 6 characters in length.');
+    if (!regDepartmentId) {
+      setValidationError("Please select a department");
       return;
     }
 
@@ -119,263 +97,306 @@ const LoginPage = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // High-contrast, eligible department styling definitions
+  // Indifferent, ultra-minimal department styling
   const departmentStyleMap = {
-    'Engineering': {
-      accentColor: '#6366f1',
-      bgColor: 'rgba(99, 102, 241, 0.12)',
-      borderColor: 'rgba(99, 102, 241, 0.5)',
-      desc: 'Full-stack development & core infrastructure',
-      icon: Code
-    },
-    'Human Resources': {
-      accentColor: '#8b5cf6',
-      bgColor: 'rgba(139, 92, 246, 0.12)',
-      borderColor: 'rgba(139, 92, 246, 0.5)',
-      desc: 'Talent management, onboarding & workplace culture',
-      icon: Users
-    },
-    'Sales & Marketing': {
-      accentColor: '#10b981',
-      bgColor: 'rgba(16, 185, 129, 0.12)',
-      borderColor: 'rgba(16, 185, 129, 0.5)',
-      desc: 'Client outreach, revenue growth & brand marketing',
-      icon: TrendingUp
-    },
-    'Finance': {
-      accentColor: '#f59e0b',
-      bgColor: 'rgba(245, 158, 11, 0.12)',
-      borderColor: 'rgba(245, 158, 11, 0.5)',
-      desc: 'Financial planning, accounting & payroll operations',
-      icon: DollarSign
-    }
+    'Engineering': { icon: Code },
+    'Human Resources': { icon: Users },
+    'Sales & Marketing': { icon: TrendingUp },
+    'Finance': { icon: DollarSign }
   };
 
   const getDeptStyle = (name) => {
-    return departmentStyleMap[name] || {
-      accentColor: '#00f2fe',
-      bgColor: 'rgba(0, 242, 254, 0.12)',
-      borderColor: 'rgba(0, 242, 254, 0.5)',
-      desc: 'Company functional operational unit',
-      icon: Building2
-    };
+    return departmentStyleMap[name] || { icon: Building2 };
   };
 
   return (
-    <div
-      className="auth-wrapper"
-      style={{
-        backgroundImage: `linear-gradient(135deg, rgba(6, 9, 19, 0.82) 0%, rgba(12, 18, 34, 0.92) 100%), url(${loginBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      <div className="glass-card auth-card" style={{ maxWidth: activeTab === 'register' ? '600px' : '480px' }}>
+    <div className="auth-wrapper" style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--bg-primary)',
+      padding: '2rem'
+    }}>
+      <div 
+        className="auth-card"
+        style={{
+          width: '100%',
+          maxWidth: activeTab === 'register' ? '560px' : '420px',
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--border-color)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '3rem 2.5rem',
+          boxShadow: 'var(--shadow-lg)',
+          transition: 'max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+        }}
+      >
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div className="logo-badge" style={{ margin: '0 auto 0.85rem', width: '52px', height: '52px', fontSize: '1.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            background: 'var(--text-primary)', 
+            color: 'var(--bg-primary)', 
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 800,
+            fontSize: '1.25rem',
+            margin: '0 auto 1.5rem',
+            letterSpacing: '-1px'
+          }}>
             CH
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px' }}>Cadre Hub</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-            Workforce Portal Authentication
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--text-primary)', margin: 0 }}>
+            {activeTab === 'login' ? 'Welcome back' : 'Create an account'}
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+            {activeTab === 'login' ? 'Enter your details to access your workspace.' : 'Join the Cadre Hub workforce suite.'}
           </p>
         </div>
 
-        {/* Auth Tab Switcher */}
-        <div className="auth-tabs">
-          <button
-            className={`auth-tab ${activeTab === 'login' ? 'active' : ''}`}
-            onClick={() => setActiveTab('login')}
-          >
-            Sign In
-          </button>
-          <button
-            className={`auth-tab ${activeTab === 'register' ? 'active' : ''}`}
-            onClick={() => setActiveTab('register')}
-          >
-            Create Account
-          </button>
-        </div>
-
-        {/* Registration Pending Success Banner */}
-        {registerSuccessMsg && (
-          <div
-            style={{
-              padding: '0.85rem 1rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.4)',
-              color: 'var(--accent-emerald)',
-              fontSize: '0.85rem',
-              marginBottom: '1.25rem',
-              textAlign: 'center',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              justifyContent: 'center'
-            }}
-          >
-            <Check size={18} /> {registerSuccessMsg}
-          </div>
-        )}
-
         {/* Global / Validation Error Alerts */}
         {(error || validationError) && (
-          <div
-            style={{
-              padding: '0.85rem 1rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(236, 72, 153, 0.15)',
-              border: '1px solid rgba(236, 72, 153, 0.3)',
-              color: 'var(--accent-rose)',
-              fontSize: '0.85rem',
-              marginBottom: '1.25rem',
-              textAlign: 'center',
-              fontWeight: 600
-            }}
-          >
+          <div style={{
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            background: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            color: '#ef4444',
+            fontSize: '0.85rem',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            fontWeight: 500
+          }}>
             {validationError || error}
           </div>
         )}
+        
+        {registerSuccessMsg && (
+          <div style={{
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            background: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.2)',
+            color: '#10b981',
+            fontSize: '0.85rem',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            fontWeight: 500
+          }}>
+            {registerSuccessMsg}
+          </div>
+        )}
 
-        {/* Tab 1: Login Form */}
+        {/* Form Container */}
         {activeTab === 'login' ? (
-          <form onSubmit={handleLoginSubmit}>
-            <div className="form-group">
-              <label className="form-label">Email Address *</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="email"
-                  className="form-control"
-                  style={{ paddingLeft: '2.5rem' }}
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="admin@teamhub.com"
-                  required
-                />
-                <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              </div>
+          <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Email address</label>
+              <input
+                type="email"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                placeholder="name@company.com"
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  background: 'transparent',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '6px',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+              />
             </div>
 
-            <div className="form-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                <label className="form-label" style={{ marginBottom: 0 }}>Password *</label>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Password</label>
                 <button
                   type="button"
                   onClick={() => navigate('/forgot-password')}
-                  style={{ background: 'none', border: 'none', color: 'var(--accent-cyan)', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}
+                  onMouseEnter={(e) => e.target.style.color = 'var(--text-primary)'}
+                  onMouseLeave={(e) => e.target.style.color = 'var(--text-muted)'}
                 >
-                  Forgot Password?
+                  Forgot password?
                 </button>
               </div>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="password"
-                  className="form-control"
-                  style={{ paddingLeft: '2.5rem' }}
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  required
-                />
-                <Lock size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              </div>
+              <input
+                type="password"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  background: 'transparent',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '6px',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+              />
             </div>
 
             <button
               type="submit"
-              className="btn btn-primary"
-              style={{ width: '100%', marginTop: '1rem', padding: '0.85rem' }}
               disabled={loading}
+              style={{
+                marginTop: '0.5rem',
+                width: '100%',
+                padding: '0.75rem',
+                background: 'var(--text-primary)',
+                color: 'var(--bg-primary)',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: 500,
+                fontSize: '0.95rem',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                transition: 'opacity 0.2s'
+              }}
+              onMouseEnter={(e) => !loading && (e.target.style.opacity = '0.9')}
+              onMouseLeave={(e) => !loading && (e.target.style.opacity = '1')}
             >
-              {loading ? 'Authenticating...' : (
-                <>
-                  Sign In to Team Hub <ArrowRight size={18} />
-                </>
-              )}
+              {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
         ) : (
-          /* Tab 2: Registration Form (Clean - Excludes Phone & Country) */
-          <form onSubmit={handleRegisterSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">First Name *</label>
+          <form onSubmit={handleRegisterSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>First name</label>
                 <input
                   type="text"
-                  className="form-control"
                   value={regFirstName}
                   onChange={(e) => setRegFirstName(e.target.value)}
-                  placeholder="John"
                   required
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: 'transparent',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.95rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
                 />
               </div>
-
-              <div className="form-group">
-                <label className="form-label">Last Name *</label>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Last name</label>
                 <input
                   type="text"
-                  className="form-control"
                   value={regLastName}
                   onChange={(e) => setRegLastName(e.target.value)}
-                  placeholder="Doe"
                   required
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: 'transparent',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.95rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Work Email Address *</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="email"
-                  className="form-control"
-                  style={{ paddingLeft: '2.5rem' }}
-                  value={regEmail}
-                  onChange={(e) => setRegEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  required
-                />
-                <Mail size={18} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Work email</label>
+              <input
+                type="email"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                placeholder="name@company.com"
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  background: 'transparent',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '6px',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+              />
             </div>
 
-            <div className="form-row" style={{ gridTemplateColumns: '1fr 1fr', alignItems: 'end' }}>
-              <div className="form-group">
-                <label className="form-label">Password <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>(min 6, letter + number)</span></label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Password</label>
                 <input
                   type="password"
-                  className="form-control"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
-                  placeholder="e.g. Pass123"
                   required
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: 'transparent',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.95rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
                 />
               </div>
-
-              <div className="form-group">
-                <label className="form-label">Confirm Password</label>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Confirm password</label>
                 <input
                   type="password"
-                  className="form-control"
                   value={regConfirmPassword}
                   onChange={(e) => setRegConfirmPassword(e.target.value)}
-                  placeholder="Repeat password"
                   required
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    background: 'transparent',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.95rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--text-primary)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
                 />
               </div>
             </div>
 
-            {/* Vibrant, High-Contrast Company Department Cards Picker */}
-            <div className="form-group" style={{ marginTop: '0.5rem' }}>
-              <label className="form-label" style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>Select Company Department *</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>Eligible Department Assignment</span>
-              </label>
-
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>Department</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 {departmentsList.map((d) => {
                   const style = getDeptStyle(d.name);
@@ -387,86 +408,73 @@ const LoginPage = () => {
                       key={d.id}
                       onClick={() => setRegDepartmentId(d.id)}
                       style={{
-                        padding: '0.85rem 1rem',
-                        borderRadius: 'var(--radius-md)',
-                        background: isSelected ? style.bgColor : 'rgba(255, 255, 255, 0.03)',
-                        border: `2px solid ${isSelected ? style.accentColor : 'var(--border-color)'}`,
+                        padding: '0.75rem 1rem',
+                        borderRadius: '6px',
+                        background: 'transparent',
+                        border: `1px solid ${isSelected ? 'var(--text-primary)' : 'var(--border-color)'}`,
                         cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
                         transition: 'all 0.2s ease',
-                        boxShadow: isSelected ? `0 0 15px ${style.bgColor}` : 'none',
-                        position: 'relative'
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <Icon size={18} color={style.accentColor} />
-                          <span style={{ fontWeight: 800, fontSize: '0.92rem', color: isSelected ? style.accentColor : '#ffffff' }}>
-                            {d.name}
-                          </span>
-                        </div>
-                        {isSelected && (
-                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: style.accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Check size={12} color="#000000" strokeWidth={3} />
-                          </div>
-                        )}
-                      </div>
-                      <p style={{ fontSize: '0.74rem', color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)', lineHeight: 1.3 }}>
-                        {style.desc}
-                      </p>
+                      <Icon size={16} color={isSelected ? 'var(--text-primary)' : 'var(--text-muted)'} />
+                      <span style={{ fontSize: '0.85rem', fontWeight: 500, color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                        {d.name}
+                      </span>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Department Role Policy Banner */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '0.75rem',
-                padding: '0.85rem 1rem',
-                borderRadius: 'var(--radius-md)',
-                background: 'rgba(0, 242, 254, 0.08)',
-                border: '1px solid rgba(0, 242, 254, 0.2)',
-                color: 'var(--text-secondary)',
-                fontSize: '0.8rem',
-                marginTop: '0.5rem',
-                marginBottom: '1.25rem'
-              }}
-            >
-              <Info size={20} color="var(--accent-cyan)" style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <strong style={{ color: 'var(--accent-cyan)' }}>Automated Department Access</strong>
-                <p style={{ marginTop: '2px' }}>
-                  Your account will automatically log into your selected department. Specific managerial roles (Manager, HR Staff, Admin) are governed by Admin verification.
-                </p>
-              </div>
-            </div>
-
             <button
               type="submit"
-              className="btn btn-primary"
-              style={{ width: '100%', padding: '0.85rem' }}
               disabled={loading}
+              style={{
+                marginTop: '1rem',
+                width: '100%',
+                padding: '0.75rem',
+                background: 'var(--text-primary)',
+                color: 'var(--bg-primary)',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: 500,
+                fontSize: '0.95rem',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                transition: 'opacity 0.2s'
+              }}
+              onMouseEnter={(e) => !loading && (e.target.style.opacity = '0.9')}
+              onMouseLeave={(e) => !loading && (e.target.style.opacity = '1')}
             >
-              {loading ? 'Creating Account...' : (
-                <>
-                  Register & Access Department <ArrowRight size={18} />
-                </>
-              )}
+              {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
         )}
 
-        <div style={{ marginTop: '1.75rem', textAlign: 'center' }}>
-          <button
-            onClick={() => navigate('/')}
-            style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.85rem' }}
-          >
-            ← Back to Team Hub Landing Page
-          </button>
+        {/* Footer Toggle */}
+        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>
+            {activeTab === 'login' ? "Don't have an account?" : "Already have an account?"}
+            <button
+              onClick={() => setActiveTab(activeTab === 'login' ? 'register' : 'login')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-primary)',
+                fontWeight: 500,
+                cursor: 'pointer',
+                marginLeft: '0.5rem',
+                padding: 0
+              }}
+            >
+              {activeTab === 'login' ? 'Sign up' : 'Log in'}
+            </button>
+          </p>
         </div>
+
       </div>
     </div>
   );

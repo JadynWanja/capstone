@@ -12,20 +12,20 @@ class Employee(db.Model):
     __tablename__ = 'employees'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
-    employee_code = db.Column(db.String(20), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False, index=True)
+    employee_code = db.Column(db.String(20), unique=True, nullable=False, index=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=False, index=True)
     phone = db.Column(db.String(30), nullable=True)
     country = db.Column(db.String(50), nullable=True)
     address = db.Column(db.String(255), nullable=True)
     emergency_contact_name = db.Column(db.String(100), nullable=True)
     emergency_contact_phone = db.Column(db.String(30), nullable=True)
 
-    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=True)
-    position_id = db.Column(db.Integer, db.ForeignKey('job_positions.id'), nullable=True)
-    manager_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=True)
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=True, index=True)
+    position_id = db.Column(db.Integer, db.ForeignKey('job_positions.id'), nullable=True, index=True)
+    manager_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=True, index=True)
 
     employment_status = db.Column(db.String(20), default=EmploymentStatus.FULL_TIME, nullable=False)
     hire_date = db.Column(db.Date, nullable=False, default=datetime.utcnow)

@@ -5,6 +5,7 @@ from app.extensions import db
 from app.models.user import User, UserRole
 from app.models.employee import Employee, EmploymentStatus
 from app.models.leave import LeaveType, LeaveBalance
+from app.models.promotion import EmployeePromotion
 from app.utils.rbac import token_required, role_required, can_view_sensitive_info
 from app.utils.audit import log_audit
 
@@ -219,6 +220,9 @@ def update_employee(emp_id):
     # ── Privileged HR / Admin-Only Fields ───────────────────────────────────
     # These are COMPLETELY IGNORED for self-edits by non-admin/HR employees.
     if is_admin_or_hr:
+        old_position_id = emp.position_id
+        old_salary = emp.salary
+
         if 'first_name' in data and data['first_name']:
             emp.first_name = data['first_name'].strip()
         if 'last_name' in data and data['last_name']:
@@ -237,6 +241,19 @@ def update_employee(emp_id):
             emp.salary = float(data['salary']) if data['salary'] not in [None, ''] else None
         if 'national_id' in data:
             emp.national_id = data['national_id']
+
+        # Promotion Tracking
+        if current_u.role == UserRole.ADMIN and old_position_id != emp.position_id and emp.position_id is not None:
+            promotion = EmployeePromotion(
+                employee_id=emp.id,
+                old_position_id=old_position_id,
+                new_position_id=emp.position_id,
+                promoted_by_id=current_u.id,
+                old_salary=old_salary,
+                new_salary=emp.salary,
+                benefits_unlocked="Congratulations on your new position! Check with HR for updated benefits details."
+            )
+            db.session.add(promotion)
 
         # Only Admins can change another person's system role.
         # Admin CANNOT escalate their own role (prevents self-promotion attacks).
@@ -284,3 +301,20 @@ def delete_employee(emp_id):
         'success': True,
         'message': f'Employee {emp.first_name} {emp.last_name} soft deleted successfully'
     })
+
+@employee_bp.route('/me/eligibility', methods=['GET'])
+@token_required
+def get_my_eligibility():
+    """Returns the promotion history and eligibility details for the logged-in user."""
+    current_u = g.current_user
+    emp = current_u.employee_profile
+    
+    if not emp:
+        return jsonify({'success': False, 'message': 'No employee profile found'}), 404
+        
+    promotions = EmployeePromotion.query.filter_by(employee_id=emp.id).order_by(EmployeePromotion.created_at.desc()).all()
+    
+    return jsonify({
+        'success': True,
+        'promotions': [p.to_dict() for p in promotions]
+    }), 200

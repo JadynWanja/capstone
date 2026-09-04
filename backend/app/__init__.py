@@ -58,6 +58,7 @@ def create_app(config_class=Config):
             from app.models.attendance import AttendanceRecord
             from app.models.notification import Notification
             from app.models.audit_log import AuditLog
+            from app.models.promotion import EmployeePromotion
             from app.utils.seed import seed_database
 
             db.create_all()

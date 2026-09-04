@@ -20,6 +20,7 @@ import DepartmentsPage from './pages/DepartmentsPage';
 import LeavesPage from './pages/LeavesPage';
 import AttendancePage from './pages/AttendancePage';
 import AuditLogsPage from './pages/AuditLogsPage';
+import EligibilityPage from './pages/EligibilityPage';
 
 const AppLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
@@ -68,6 +69,7 @@ const App = () => {
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/leaves" element={<LeavesPage />} />
             <Route path="/attendance" element={<AttendancePage />} />
+            <Route path="/eligibility" element={<EligibilityPage />} />
 
             {/* Admin / HR Only Routes */}
             <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'HR_STAFF']} />}>

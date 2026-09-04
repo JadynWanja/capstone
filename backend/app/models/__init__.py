@@ -5,6 +5,7 @@ from app.models.leave import LeaveType, LeaveBalance, LeaveRequest, LeaveStatus
 from app.models.attendance import AttendanceRecord, AttendanceStatus
 from app.models.notification import Notification
 from app.models.audit_log import AuditLog
+from app.models.promotion import EmployeePromotion
 
 __all__ = [
     'User', 'UserRole',
@@ -13,5 +14,6 @@ __all__ = [
     'LeaveType', 'LeaveBalance', 'LeaveRequest', 'LeaveStatus',
     'AttendanceRecord', 'AttendanceStatus',
     'Notification',
-    'AuditLog'
+    'AuditLog',
+    'EmployeePromotion'
 ]
