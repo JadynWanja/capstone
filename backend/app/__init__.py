@@ -38,10 +38,7 @@ def create_app(config_class=Config):
         response.headers['Expires'] = '0'
         return response
 
-    @app.route('/api/<path:dummy>', methods=['OPTIONS'])
-    @app.route('/api', methods=['OPTIONS'])
-    def handle_options(dummy=None):
-        return jsonify({'status': 'ok'}), 200
+
 
     @app.route('/api/ping', methods=['GET'])
     def ping():
@@ -91,10 +88,12 @@ def create_app(config_class=Config):
 
     @app.errorhandler(404)
     def not_found(e):
-        return jsonify({'success': False, 'message': 'Endpoint not found'}), 404
+        response = jsonify({'success': False, 'message': 'Endpoint not found'})
+        return response, 404
 
     @app.errorhandler(500)
     def internal_error(e):
-        return jsonify({'success': False, 'message': 'An internal server error occurred'}), 500
+        response = jsonify({'success': False, 'message': 'An internal server error occurred'})
+        return response, 500
 
     return app
