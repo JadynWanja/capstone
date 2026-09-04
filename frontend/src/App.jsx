@@ -22,11 +22,21 @@ import AttendancePage from './pages/AttendancePage';
 import AuditLogsPage from './pages/AuditLogsPage';
 
 const AppLayout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   return (
     <div className="app-layout">
-      <Sidebar />
+      {/* Mobile Overlay Backdrop */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={closeSidebar} />
+      )}
+      
+      <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
       <div className="main-content">
-        <Header />
+        <Header toggleSidebar={toggleSidebar} />
         <Outlet />
       </div>
       <EmployeeModal />

@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { fetchNotifications, markNotificationsRead } from '../../store/slices/notificationSlice';
 import { openModal } from '../../store/slices/uiSlice';
-import { Bell, LogOut, User as UserIcon, Check } from 'lucide-react';
+import { Bell, LogOut, User as UserIcon, Check, Menu } from 'lucide-react';
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { unreadCount, list: notifications } = useSelector((state) => state.notifications);
@@ -36,11 +36,20 @@ const Header = () => {
 
   return (
     <header className="top-header">
-      <div>
-        <h2 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Welcome back, {user?.employee?.first_name || user?.email}</h2>
-        <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-          {user?.employee?.department_name || 'Organization'} • {user?.employee?.position_title || 'Staff Member'}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <button 
+          className="mobile-menu-btn" 
+          onClick={toggleSidebar}
+          aria-label="Toggle Sidebar"
+        >
+          <Menu size={24} />
+        </button>
+        <div>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Welcome back, {user?.employee?.first_name || user?.email}</h2>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            {user?.employee?.department_name || 'Organization'} • {user?.employee?.position_title || 'Staff Member'}
+          </span>
+        </div>
       </div>
 
       <div className="user-profile-widget">

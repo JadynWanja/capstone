@@ -7,10 +7,11 @@ import {
   Building2,
   Calendar,
   Clock,
-  ShieldCheck
+  ShieldCheck,
+  X
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, closeSidebar }) => {
   const { user } = useSelector((state) => state.auth);
   const role = user?.role || 'EMPLOYEE';
 
@@ -26,13 +27,22 @@ const Sidebar = () => {
   const filteredNavItems = navItems.filter((item) => item.roles.includes(role));
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <div className="logo-badge">CH</div>
-        <div>
-          <h1 className="logo-text">Cadre Hub</h1>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Workforce Suite</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div className="logo-badge">CH</div>
+          <div>
+            <h1 className="logo-text">Cadre Hub</h1>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Workforce Suite</span>
+          </div>
         </div>
+        <button 
+          className="mobile-close-btn" 
+          onClick={closeSidebar}
+          aria-label="Close Sidebar"
+        >
+          <X size={24} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
