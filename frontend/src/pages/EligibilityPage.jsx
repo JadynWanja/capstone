@@ -125,7 +125,7 @@ const EligibilityPage = () => {
                         Reason: {promo.reason || 'N/A'}
                       </p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                        <Calendar size={12} /> {new Date(promo.promotion_date).toLocaleDateString()}
+                        <Calendar size={12} /> {new Date(promo.date_promoted).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
@@ -202,7 +202,7 @@ const EligibilityPage = () => {
                       Previous: {promo.old_position}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      <Calendar size={12} /> {new Date(promo.promotion_date).toLocaleDateString()}
+                      <Calendar size={12} /> {new Date(promo.date_promoted).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
