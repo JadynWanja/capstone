@@ -282,7 +282,7 @@ def update_user_eligibility(user_id):
 
     db.session.commit()
 
-    log_audit('UPDATE_USER_ELIGIBILITY', 'User', target_id=target_user.id, details=f"Updated eligibility for {target_user.email}: Role={target_user.role}, Active={target_user.is_active}")
+    log_audit('UPDATE_USER_ELIGIBILITY', 'User', target_id=target_user.id, details=f"Updated eligibility for {target_user.email}: Role={target_user.role}, Active={target_user.is_active}", user_id=g.current_user.id)
 
     return jsonify({
         'success': True,
