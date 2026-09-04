@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Star, Calendar, ArrowUpCircle } from 'lucide-react';
+import api from '../services/api';
 
 const EligibilityPage = () => {
   const [eligibilityData, setEligibilityData] = useState(null);
@@ -9,19 +10,10 @@ const EligibilityPage = () => {
   useEffect(() => {
     const fetchEligibility = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('/api/employees/me/eligibility', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!res.ok) {
-          throw new Error('Failed to fetch eligibility data');
-        }
-        const data = await res.json();
-        setEligibilityData(data);
+        const res = await api.get('/employees/me/eligibility');
+        setEligibilityData(res.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.response?.data?.message || err.message || 'Failed to fetch eligibility data');
       } finally {
         setLoading(false);
       }
