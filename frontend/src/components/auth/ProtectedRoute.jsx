@@ -10,12 +10,7 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <h2 style={{ color: 'var(--accent-rose)', fontSize: '1.5rem', marginBottom: '1rem' }}>403 - Access Denied</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>You do not have the required permissions to view this page.</p>
-      </div>
-    );
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <Outlet />;
