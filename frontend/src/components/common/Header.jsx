@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { fetchNotifications, markNotificationsRead } from '../../store/slices/notificationSlice';
 import { openModal } from '../../store/slices/uiSlice';
-import { Bell, LogOut, User as UserIcon, Check, Menu } from 'lucide-react';
+import { Bell, LogOut, User as UserIcon, Check, Menu, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Header = ({ toggleSidebar }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { unreadCount, list: notifications } = useSelector((state) => state.notifications);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     dispatch(fetchNotifications());
@@ -53,6 +55,15 @@ const Header = ({ toggleSidebar }) => {
       </div>
 
       <div className="user-profile-widget">
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={toggleTheme}
+          style={{ borderRadius: '50%', width: '40px', height: '40px', padding: 0 }}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+
         {/* Notifications dropdown */}
         <div style={{ position: 'relative' }}>
           <button
