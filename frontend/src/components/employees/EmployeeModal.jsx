@@ -255,6 +255,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.department_id}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 >
                   <option value="">Select Department</option>
                   {departments.map((d) => (
@@ -270,6 +271,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.position_id}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 >
                   <option value="">Select Position</option>
                   {positions.map((p) => (
@@ -287,6 +289,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.manager_id}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 >
                   <option value="">No Direct Manager</option>
                   {employees.filter(e => e.id !== modalData?.id).map((m) => (
@@ -302,6 +305,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.employment_status}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 >
                   <option value="FULL_TIME">Full-Time</option>
                   <option value="PART_TIME">Part-Time</option>
@@ -319,6 +323,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.hire_date}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 />
               </div>
 
@@ -329,6 +334,7 @@ const EmployeeModal = () => {
                   className="form-control"
                   value={formData.role}
                   onChange={handleChange}
+                  disabled={!isAdminOrHR}
                 >
                   <option value="EMPLOYEE">Employee</option>
                   <option value="MANAGER">Manager</option>
@@ -353,6 +359,7 @@ const EmployeeModal = () => {
                   value={formData.salary}
                   onChange={handleChange}
                   placeholder="e.g. 85000"
+                  disabled={!isAdminOrHR}
                 />
               </div>
 
@@ -365,6 +372,7 @@ const EmployeeModal = () => {
                   value={formData.national_id}
                   onChange={handleChange}
                   placeholder="e.g. SSN-998877661"
+                  disabled={!isAdminOrHR}
                 />
               </div>
             </div>

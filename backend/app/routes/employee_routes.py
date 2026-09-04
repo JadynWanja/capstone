@@ -228,11 +228,11 @@ def update_employee(emp_id):
         if 'last_name' in data and data['last_name']:
             emp.last_name = data['last_name'].strip()
         if 'department_id' in data:
-            emp.department_id = data['department_id'] if data['department_id'] != '' else None
+            emp.department_id = int(data['department_id']) if data['department_id'] not in ['', None] else None
         if 'position_id' in data:
-            emp.position_id = data['position_id'] if data['position_id'] != '' else None
+            emp.position_id = int(data['position_id']) if data['position_id'] not in ['', None] else None
         if 'manager_id' in data:
-            emp.manager_id = data['manager_id'] if data['manager_id'] != '' else None
+            emp.manager_id = int(data['manager_id']) if data['manager_id'] not in ['', None] else None
         if 'employment_status' in data:
             emp.employment_status = data['employment_status']
         if 'hire_date' in data and data['hire_date']:
@@ -243,7 +243,7 @@ def update_employee(emp_id):
             emp.national_id = data['national_id']
 
         # Promotion Tracking
-        if current_u.role == UserRole.ADMIN and old_position_id != emp.position_id and emp.position_id is not None:
+        if is_admin_or_hr and old_position_id != emp.position_id and emp.position_id is not None:
             promotion = EmployeePromotion(
                 employee_id=emp.id,
                 old_position_id=old_position_id,
