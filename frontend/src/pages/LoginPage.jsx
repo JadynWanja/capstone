@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { loginUser, registerUser, clearError } from '../../store/slices/authSlice';
+import { loginUser, registerUser, clearAuthError } from '../store/slices/authSlice';
 import { ArrowRight, Mail, Lock, Check, Building2, Code, Users, TrendingUp, DollarSign, Info } from 'lucide-react';
 
 const LoginPage = () => {
@@ -31,7 +31,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     // Clear Redux errors when tab switches
-    dispatch(clearError());
+    dispatch(clearAuthError());
     setValidationError('');
     setRegisterSuccessMsg('');
   }, [activeTab, dispatch]);
