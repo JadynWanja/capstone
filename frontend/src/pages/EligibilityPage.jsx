@@ -43,6 +43,106 @@ const EligibilityPage = () => {
 
   if (!eligibilityData) return null;
 
+  if (eligibilityData.is_admin_view) {
+    return (
+      <div className="page-container">
+        <div style={{ marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <Star size={28} color="var(--accent-amber)" /> Admin Eligibility & Promotions Dashboard
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+            Track recent user eligibility authorizations and company-wide role promotions.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 1fr' }}>
+          
+          {/* Eligibility Logs */}
+          <div style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ShieldAlert size={20} color="var(--accent-cyan)" /> Recent Eligibility Approvals
+            </h3>
+
+            {eligibilityData.eligibility_logs && eligibilityData.eligibility_logs.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {eligibilityData.eligibility_logs.map((log, index) => (
+                  <div key={index} style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: '1rem', 
+                    padding: '1rem', 
+                    background: 'var(--bg-secondary)', 
+                    borderRadius: 'var(--radius-sm)', 
+                    borderLeft: '4px solid var(--accent-cyan)'
+                  }}>
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
+                        {log.details || 'User eligibility updated'}
+                      </h4>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        Action by: {log.user_email}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                        <Calendar size={12} /> {new Date(log.timestamp).toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '2rem 1rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-sm)' }}>
+                <p style={{ color: 'var(--text-secondary)' }}>No eligibility authorizations found.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Promotions History */}
+          <div style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ArrowUpCircle size={20} color="var(--accent-purple)" /> Recent Company Promotions
+            </h3>
+
+            {eligibilityData.promotions && eligibilityData.promotions.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {eligibilityData.promotions.map((promo, index) => (
+                  <div key={index} style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: '1rem', 
+                    padding: '1rem', 
+                    background: 'var(--bg-secondary)', 
+                    borderRadius: 'var(--radius-sm)', 
+                    borderLeft: '4px solid var(--accent-purple)'
+                  }}>
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
+                        Employee #{promo.employee_id} promoted to {promo.new_position}
+                      </h4>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        Previous: {promo.old_position}
+                      </p>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        Reason: {promo.reason || 'N/A'}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                        <Calendar size={12} /> {new Date(promo.promotion_date).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '2rem 1rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-sm)' }}>
+                <p style={{ color: 'var(--text-secondary)' }}>No promotions recorded.</p>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page-container">
       <div style={{ marginBottom: '2rem' }}>

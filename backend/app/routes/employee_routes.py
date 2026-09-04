@@ -305,8 +305,24 @@ def delete_employee(emp_id):
 @employee_bp.route('/me/eligibility', methods=['GET'])
 @token_required
 def get_my_eligibility():
-    """Returns the promotion history and eligibility details for the logged-in user."""
+    """Returns the promotion history and eligibility details for the logged-in user.
+       If the user is an Admin or HR, it returns company-wide records.
+    """
     current_u = g.current_user
+    
+    if current_u.role in [UserRole.ADMIN, UserRole.HR_STAFF]:
+        from app.models.audit_log import AuditLog
+        # Return company wide promotions and eligibility audit logs
+        promotions = EmployeePromotion.query.order_by(EmployeePromotion.created_at.desc()).limit(100).all()
+        eligibility_logs = AuditLog.query.filter_by(action='UPDATE_USER_ELIGIBILITY').order_by(AuditLog.timestamp.desc()).limit(100).all()
+        
+        return jsonify({
+            'success': True,
+            'is_admin_view': True,
+            'promotions': [p.to_dict() for p in promotions],
+            'eligibility_logs': [log.to_dict() for log in eligibility_logs]
+        }), 200
+
     emp = current_u.employee_profile
     
     if not emp:
@@ -316,5 +332,10 @@ def get_my_eligibility():
     
     return jsonify({
         'success': True,
+        'is_admin_view': False,
+        'employee': {
+            'employee_code': emp.employee_code,
+            'position': emp.position.title if emp.position else 'Unknown'
+        },
         'promotions': [p.to_dict() for p in promotions]
     }), 200
